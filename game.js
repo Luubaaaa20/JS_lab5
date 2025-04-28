@@ -1,10 +1,21 @@
+// Налаштування складнощі
 const settings = {
   easy:   { clickTime: 1500, size: 60, padding: 20 },
   normal: { clickTime: 1000, size: 40, padding: 30 },
-  hard:   { clickTime:  600, size: 20, padding: 50 }
+  hard:   { clickTime:  600, size: 20, padding: 50 },
+  expert: { clickTime:  400, size: 15, padding: 70 },
+  insane: { clickTime:  200, size: 10, padding: 100 }
 };
 
-const colorMap = { Red: 'red', Green: 'green', Blue: 'blue' };
+// Карта кольорів
+const colorMap = {
+  Red:    'red',
+  Green:  'green',
+  Blue:   'blue',
+  Yellow: 'yellow',
+  Purple: 'purple',
+  Orange: 'orange'
+};
 
 // DOM-елементи
 const menu        = document.getElementById('menu');
@@ -16,52 +27,68 @@ const scoreDisp   = document.getElementById('scoreDisplay');
 const timeDisp    = document.getElementById('timeDisplay');
 const field       = document.getElementById('gameField');
 
-let score = 0, clickTime, size, padding, chosenColor;
-let gameTimer = null, countdownTimer = null, currentSquare = null;
+// Ігрові змінні
+let score = 0,
+    clickTime, size, padding, chosenColor,
+    gameTimer = null,
+    countdownTimer = null,
+    currentSquare = null;
 
 startBtn.addEventListener('click', () => {
   const diff = diffSelect.value;
   const col  = colorSelect.value;
-  if (!col) return alert('Please choose a color!');
+  if (!col) {
+    alert('Please choose a color!');
+    return;
+  }
+  // Отримуємо параметри за складністю
   ({ clickTime, size, padding } = settings[diff]);
   chosenColor = colorMap[col];
-  score = 0; updateScore();
-  menu.style.display = 'none';
+  score = 0;
+  updateScore();
+
+  menu.style.display       = 'none';
   gameScreen.style.display = 'block';
   spawnNext();
 });
 
 function spawnNext() {
+  // Видаляємо попередній квадрат і скидаємо таймери
   if (currentSquare) currentSquare.remove();
   clearTimers();
 
+  // Створюємо новий квадрат
   const sq = document.createElement('div');
   sq.className = 'square';
-  sq.style.cssText = `
-    width:${size}px;
-    height:${size}px;
-    background:${chosenColor};
-    position:absolute;
-    cursor:pointer;
-    left:${padding + Math.random()*(field.clientWidth-size-padding)}px;
-    top:${padding + Math.random()*(field.clientHeight-size-padding)}px;
-  `;
+  sq.style.width      = size + 'px';
+  sq.style.height     = size + 'px';
+  sq.style.background = chosenColor;
 
-  field.append(sq);
+  // Розрахунок меж появи з урахуванням padding
+  const maxX = field.clientWidth  - size - padding;
+  const maxY = field.clientHeight - size - padding;
+  const x = padding + Math.random() * maxX;
+  const y = padding + Math.random() * maxY;
+  sq.style.left = x + 'px';
+  sq.style.top  = y + 'px';
+
+  field.appendChild(sq);
   currentSquare = sq;
 
+  // Таймер на клік
   gameTimer = setTimeout(endGame, clickTime);
   startCountdown(clickTime);
 
   sq.addEventListener('click', () => {
     clearTimers();
-    score++; updateScore();
+    score++;
+    updateScore();
     spawnNext();
   }, { once: true });
 }
 
 function startCountdown(duration) {
-  let timeLeft = duration/1000;
+  let timeLeft = duration / 1000;
   updateTime(timeLeft);
   countdownTimer = setInterval(() => {
     timeLeft = Math.max(0, timeLeft - 0.1);
@@ -70,8 +97,12 @@ function startCountdown(duration) {
   }, 100);
 }
 
-function updateScore() { scoreDisp.textContent = `Score: ${score}`; }
-function updateTime(t)    { timeDisp.textContent  = `Time left for click: ${t.toFixed(1)}s`; }
+function updateScore() {
+  scoreDisp.textContent = `Score: ${score}`;
+}
+function updateTime(t) {
+  timeDisp.textContent = `Time left for click: ${t.toFixed(1)}s`;
+}
 function clearTimers() {
   clearTimeout(gameTimer);
   clearInterval(countdownTimer);
@@ -79,6 +110,6 @@ function clearTimers() {
 
 function endGame() {
   clearTimers();
-  currentSquare?.remove();
-  alert(`Game over! Your score is ${score}. Reload to play again.`);
+  if (currentSquare) currentSquare.remove();
+  alert(`Game over! Your score is ${score}.\nReload the page to play again.`);
 }
