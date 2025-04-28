@@ -1,9 +1,9 @@
 const settings = {
-  easy:   { clickTime: 1500, size: 60, padding: 20 },
-  normal: { clickTime: 1000, size: 40, padding: 30 },
-  hard:   { clickTime:  600, size: 20, padding: 50 },
-  expert: { clickTime:  400, size: 15, padding: 70 },
-  insane: { clickTime:  200, size: 10, padding: 100 }
+  easy:   { clickTime: 2000, size: 80, padding: 20 },
+  normal: { clickTime: 1500, size: 60, padding: 30 },
+  hard:   { clickTime: 1200, size: 40, padding: 50 },
+  expert: { clickTime: 1000, size: 30, padding: 70 },
+  insane: { clickTime:  800, size: 20, padding: 100 }
 };
 
 const colorMap = {
