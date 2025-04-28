@@ -1,4 +1,3 @@
-// Налаштування складнощі
 const settings = {
   easy:   { clickTime: 1500, size: 60, padding: 20 },
   normal: { clickTime: 1000, size: 40, padding: 30 },
@@ -7,7 +6,6 @@ const settings = {
   insane: { clickTime:  200, size: 10, padding: 100 }
 };
 
-// Карта кольорів
 const colorMap = {
   Red:    'red',
   Green:  'green',
@@ -17,7 +15,6 @@ const colorMap = {
   Orange: 'orange'
 };
 
-// DOM-елементи
 const menu        = document.getElementById('menu');
 const gameScreen  = document.getElementById('game');
 const startBtn    = document.getElementById('startBtn');
@@ -27,7 +24,6 @@ const scoreDisp   = document.getElementById('scoreDisplay');
 const timeDisp    = document.getElementById('timeDisplay');
 const field       = document.getElementById('gameField');
 
-// Ігрові змінні
 let score = 0,
     clickTime, size, padding, chosenColor,
     gameTimer = null,
@@ -41,7 +37,6 @@ startBtn.addEventListener('click', () => {
     alert('Please choose a color!');
     return;
   }
-  // Отримуємо параметри за складністю
   ({ clickTime, size, padding } = settings[diff]);
   chosenColor = colorMap[col];
   score = 0;
@@ -53,18 +48,15 @@ startBtn.addEventListener('click', () => {
 });
 
 function spawnNext() {
-  // Видаляємо попередній квадрат і скидаємо таймери
   if (currentSquare) currentSquare.remove();
   clearTimers();
 
-  // Створюємо новий квадрат
   const sq = document.createElement('div');
   sq.className = 'square';
   sq.style.width      = size + 'px';
   sq.style.height     = size + 'px';
   sq.style.background = chosenColor;
 
-  // Розрахунок меж появи з урахуванням padding
   const maxX = field.clientWidth  - size - padding;
   const maxY = field.clientHeight - size - padding;
   const x = padding + Math.random() * maxX;
@@ -75,7 +67,6 @@ function spawnNext() {
   field.appendChild(sq);
   currentSquare = sq;
 
-  // Таймер на клік
   gameTimer = setTimeout(endGame, clickTime);
   startCountdown(clickTime);
 
