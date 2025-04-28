@@ -3,7 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <title>Pixel Hunt Game</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    #menu {
+      margin-bottom: 20px;
+    }
+    #gameField {
+      position: relative;      
+      width: 800px;            
+      height: 600px;           
+      border: 3px solid #333;  
+      background: #f9f9f9;
+      overflow: hidden;        
+      margin-top: 10px;
+    }
+    .square {
+      position: absolute;
+      cursor: pointer;
+    }
+    label, select, button {
+      font-size: 1rem;
+      margin-right: 10px;
+    }
+  </style>
 </head>
 <body>
   <h1>Pixel Hunt</h1>
